@@ -66,7 +66,7 @@ screen_height = 600
 screen = pygame.display.set_mode([screen_width, screen_height])
 
 # Set the title of the window
-pygame.display.set_caption('Snake Example')
+pygame.display.set_caption('Snake')
 
 all_sprites_list = pygame.sprite.Group()
 snake_list = pygame.sprite.Group()
@@ -127,6 +127,14 @@ while not done:
     # Insert new segment into the list
     snake_segments.insert(0, segment)
     all_sprites_list.add(segment)
+
+    # See if the player block has collided with anything.
+    blocks_hit_list = pygame.sprite.spritecollide(block, snake_list, True)
+ 
+    # Check the list of collisions.
+    for segment in blocks_hit_list:
+        score += 1
+        print(score)
 
     # Get rid of last segment of the snake
     # .pop() command removes last item in list
