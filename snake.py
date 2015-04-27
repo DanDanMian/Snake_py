@@ -1,4 +1,5 @@
 import pygame
+import random
 
 # --- Globals ---
 # Colors
@@ -6,8 +7,8 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 # Set the width and height of each snake segment
-segment_width = 15
-segment_height = 15
+segment_width = 17
+segment_height = 17
 # Margin between each segment
 segment_margin = 3
 
@@ -32,29 +33,68 @@ class Segment(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
+class Block(pygame.sprite.Sprite):
+    """
+    This class represents the ball.
+    It derives from the "Sprite" class in Pygame.
+    """
+ 
+    def __init__(self, color, width, height):
+        """ Constructor. Pass in the color of the block,
+        and its x and y position. """
+ 
+        # Call the parent class (Sprite) constructor
+        pygame.sprite.Sprite.__init__(self)
+ 
+        # Create an image of the block, and fill it with a color.
+        # This could also be an image loaded from the disk.
+        self.image = pygame.Surface([width, height])
+        self.image.fill(color)
+ 
+        # Fetch the rectangle object that has the dimensions of the image
+        # image.
+        # Update the position of this object by setting the values
+        # of rect.x and rect.y
+        self.rect = self.image.get_rect()
+
 # Call this function so the Pygame library can initialize itself
 pygame.init()
 
 # Create an 800x600 sized screen
-screen = pygame.display.set_mode([800, 600])
+screen_width = 800
+screen_height = 600
+screen = pygame.display.set_mode([screen_width, screen_height])
 
 # Set the title of the window
 pygame.display.set_caption('Snake Example')
 
-allspriteslist = pygame.sprite.Group()
+all_sprites_list = pygame.sprite.Group()
+snake_list = pygame.sprite.Group()
 
 # Create an initial snake
 snake_segments = []
 for i in range(15):
-    x = 250 - (segment_width + segment_margin) * i
-    y = 30
+    x = 300 - (segment_width + segment_margin) * i
+    y = 40
     segment = Segment(x, y)
     snake_segments.append(segment)
-    allspriteslist.add(segment)
+    snake_list.add(segment)
+    all_sprites_list.add(segment)
+    
+# This represents a block
+block = Block(WHITE, segment_width, segment_height)
+ 
+# Set a random location for the block
+block.rect.x = random.randrange(screen_width)%20*20
+block.rect.y = random.randrange(screen_height)%20*20
+ 
+# Add the block to the list of objects
+all_sprites_list.add(block)
 
 
 clock = pygame.time.Clock()
 done = False
+score = 0
 
 while not done:
 
@@ -79,11 +119,6 @@ while not done:
                 x_change = 0
                 y_change = (segment_height + segment_margin)
 
-    # Get rid of last segment of the snake
-    # .pop() command removes last item in list
-    old_segment = snake_segments.pop()
-    allspriteslist.remove(old_segment)
-
     # Figure out where new segment will be
     x = snake_segments[0].rect.x + x_change
     y = snake_segments[0].rect.y + y_change
@@ -91,13 +126,18 @@ while not done:
 
     # Insert new segment into the list
     snake_segments.insert(0, segment)
-    allspriteslist.add(segment)
+    all_sprites_list.add(segment)
+
+    # Get rid of last segment of the snake
+    # .pop() command removes last item in list
+    old_segment = snake_segments.pop()
+    all_sprites_list.remove(old_segment)
 
     # -- Draw everything
     # Clear screen
     screen.fill(BLACK)
 
-    allspriteslist.draw(screen)
+    all_sprites_list.draw(screen)
 
     # Flip screen
     pygame.display.flip()
