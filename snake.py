@@ -68,8 +68,9 @@ screen = pygame.display.set_mode([screen_width, screen_height])
 # Set the title of the window
 pygame.display.set_caption('Snake')
 
-all_sprites_list = pygame.sprite.Group()
 snake_list = pygame.sprite.Group()
+block_list = pygame.sprite.Group()
+all_sprites_list = pygame.sprite.Group()
 
 # Create an initial snake
 snake_segments = []
@@ -78,17 +79,18 @@ for i in range(15):
     y = 40
     segment = Segment(x, y)
     snake_segments.append(segment)
-    snake_list.add(segment)
+    #snake_list.add(segment)
     all_sprites_list.add(segment)
     
 # This represents a block
 block = Block(WHITE, segment_width, segment_height)
  
 # Set a random location for the block
-block.rect.x = random.randrange(screen_width)%20*20
-block.rect.y = random.randrange(screen_height)%20*20
+block.rect.x = random.randrange(screen_width/20)*20
+block.rect.y = random.randrange(screen_height/20)*20
  
 # Add the block to the list of objects
+block_list.add(block)
 all_sprites_list.add(block)
 
 
@@ -129,12 +131,21 @@ while not done:
     all_sprites_list.add(segment)
 
     # See if the player block has collided with anything.
-    blocks_hit_list = pygame.sprite.spritecollide(block, snake_list, True)
+    blocks_hit_list = pygame.sprite.spritecollide(snake_segments[0], block_list, True)
  
     # Check the list of collisions.
     for segment in blocks_hit_list:
         score += 1
         print(score)
+        block = Block(WHITE, segment_width, segment_height)
+ 
+        # Set a random location for the block
+        block.rect.x = random.randrange(screen_width/20)*20
+        block.rect.y = random.randrange(screen_height/20)*20
+ 
+        # Add the block to the list of objects
+        block_list.add(block)
+        all_sprites_list.add(block)
 
     # Get rid of last segment of the snake
     # .pop() command removes last item in list
@@ -152,6 +163,8 @@ while not done:
 
     # Pause
     clock.tick(5)
+
+    pygame.display.flip()
 
 pygame.quit()
 
