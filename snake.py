@@ -96,6 +96,7 @@ all_sprites_list.add(block)
 
 clock = pygame.time.Clock()
 done = False
+eat = False
 score = 0
 
 while not done:
@@ -135,6 +136,7 @@ while not done:
  
     # Check the list of collisions.
     for segment in blocks_hit_list:
+        eat = True
         score += 1
         print(score)
         block = Block(WHITE, segment_width, segment_height)
@@ -149,8 +151,10 @@ while not done:
 
     # Get rid of last segment of the snake
     # .pop() command removes last item in list
-    old_segment = snake_segments.pop()
-    all_sprites_list.remove(old_segment)
+    if(not eat):
+        old_segment = snake_segments.pop()
+        all_sprites_list.remove(old_segment)
+    eat = False
 
     # -- Draw everything
     # Clear screen
