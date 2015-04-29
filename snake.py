@@ -125,7 +125,12 @@ while not done:
     # Figure out where new segment will be
     x = snake_segments[0].rect.x + x_change
     y = snake_segments[0].rect.y + y_change
-    segment = Segment(x, y)
+    if x < 0 or x > screen_width:
+        done = True
+    if y < 0 or y > screen_height:
+        done = True
+    else:
+        segment = Segment(x, y)
 
     # Insert new segment into the list
     snake_segments.insert(0, segment)
@@ -168,7 +173,7 @@ while not done:
     # Pause
     clock.tick(5)
 
-    pygame.display.flip()
+print("You Lose")
 
 pygame.quit()
 
