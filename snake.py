@@ -143,7 +143,7 @@ while not done:
     for segment in blocks_hit_list:
         eat = True
         score += 1
-        print(score)
+        #print(score)
         block = Block(WHITE, segment_width, segment_height)
  
         # Set a random location for the block
@@ -174,6 +174,8 @@ while not done:
     clock.tick(5)
 
 print("You Lose")
+result = "Your score is: " + repr(score)
+print(result)
 
 pygame.quit()
 
