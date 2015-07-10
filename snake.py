@@ -171,7 +171,7 @@ while not done:
     pygame.display.flip()
 
     # Pause
-    clock.tick(5)
+    clock.tick(0)
 
 print("You Lose")
 result = "Your score is: " + repr(score)
